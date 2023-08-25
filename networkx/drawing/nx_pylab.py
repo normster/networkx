@@ -574,7 +574,7 @@ def draw_networkx_edges(
     nodelist : list, optional (default=G.nodes())
        This provides the node order for the `node_size` array (if it is an array).
 
-    node_shape :  string (default='o')
+    node_shape :  list or string (default='o')
         The marker used for nodes, used in determining edge positioning.
         Specification is as a `matplotlib.markers` marker, e.g. one of 'so^>v<dph8'.
 
@@ -830,10 +830,16 @@ def draw_networkx_edges(
                 source, target = edgelist[i][:2]
                 source_node_size = node_size[nodelist.index(source)]
                 target_node_size = node_size[nodelist.index(target)]
-                shrink_source = to_marker_edge(source_node_size, node_shape)
-                shrink_target = to_marker_edge(target_node_size, node_shape)
             else:
-                shrink_source = shrink_target = to_marker_edge(node_size, node_shape)
+                source_node_size = target_node_size = node_size
+            if np.iterable(node_shape) and not isinstance(node_shape, str):  # many node shapes
+                source, target = edgelist[i][:2]
+                source_node_shape = node_shape[nodelist.index(source)]
+                target_node_shape = node_shape[nodelist.index(target)]
+            else:
+                source_node_shape = target_node_shape = node_shape
+            shrink_source = to_marker_edge(source_node_size, source_node_shape)
+            shrink_target = to_marker_edge(target_node_size, target_node_shape)
 
             if shrink_source < min_source_margin:
                 shrink_source = min_source_margin
