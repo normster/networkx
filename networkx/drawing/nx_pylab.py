@@ -761,8 +761,10 @@ def draw_networkx_edges(
         # sides and circle.
 
         def to_marker_edge(marker_size, marker):
-            if marker in "s^>v<d":  # `large` markers need extra space
+            if marker in "^>v<d":  # `large` markers need extra space
                 return np.sqrt(2 * marker_size) / 2
+            elif marker == "D":
+                return np.sqrt(marker_size) / 2 + 1
             else:
                 return np.sqrt(marker_size) / 2
 
